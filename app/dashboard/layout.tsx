@@ -21,6 +21,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="p-4 text-xl font-bold border-b border-gray-700">Releva</div>
         <nav className="flex-1 p-4 space-y-1">
           <Link href="/dashboard" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Inicio</Link>
+          <Link href="/dashboard/empresas" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Empresas</Link>
           <Link href="/dashboard/users" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Usuarios</Link>
           <Link href="/dashboard/roles" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Roles</Link>
         </nav>
