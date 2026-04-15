@@ -20,16 +20,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className="w-56 bg-gray-900 text-white flex flex-col">
         <div className="p-4 text-xl font-bold border-b border-gray-700">Releva</div>
         <nav className="flex-1 p-4 space-y-1">
-          <Link href="/dashboard" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Inicio</Link>
-          <Link href="/dashboard/empresas" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Empresas</Link>
-          <Link href="/dashboard/users" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Usuarios</Link>
+          <Link href="/dashboard" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Home</Link>
+          <Link href="/dashboard/companies" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Companies</Link>
+          <Link href="/dashboard/users" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Users</Link>
           <Link href="/dashboard/roles" className="block px-3 py-2 rounded hover:bg-gray-700 text-sm">Roles</Link>
         </nav>
         <div className="p-4 border-t border-gray-700">
           <p className="text-xs text-gray-400 mb-2">{user.name}</p>
           <p className="text-xs text-gray-500 mb-3">{user.role}</p>
           <button onClick={() => { logout(); router.push('/login'); }} className="text-xs text-red-400 hover:text-red-300">
-            Cerrar sesión
+            Sign out
           </button>
         </div>
       </aside>

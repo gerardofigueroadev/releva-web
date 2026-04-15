@@ -25,7 +25,7 @@ export default function LoginPage() {
       login(res.accessToken, res.user);
       router.push('/dashboard');
     } catch {
-      setError('Credenciales inválidas');
+      setError('Invalid credentials');
     } finally {
       setLoading(false);
     }
@@ -47,7 +47,7 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input
               type="password"
               value={password}
@@ -62,7 +62,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-blue-600 text-white py-2 rounded font-medium hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading ? 'Ingresando...' : 'Ingresar'}
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
       </div>

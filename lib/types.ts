@@ -6,10 +6,10 @@ export interface Role {
   updatedAt: string;
 }
 
-export interface Empresa {
+export interface Company {
   id: number;
-  nombre: string;
-  ruc?: string;
+  name: string;
+  taxId?: string;
   plan: string;
   isActive: boolean;
   createdAt: string;
@@ -21,7 +21,7 @@ export interface User {
   name: string;
   email: string;
   role: Role;
-  empresa: Empresa;
+  company: Company;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -32,5 +32,5 @@ export interface AuthUser {
   name: string;
   email: string;
   role: string;
-  empresaId: number;
+  companyId: number;
 }
