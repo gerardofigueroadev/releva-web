@@ -11,6 +11,17 @@ export interface Company {
   name: string;
   taxId?: string;
   plan: string;
+  credits: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreditPackage {
+  id: number;
+  name: string;
+  credits: number;
+  price: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

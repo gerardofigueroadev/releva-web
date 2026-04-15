@@ -2,12 +2,19 @@
 import { useEffect, useState } from 'react';
 import { apiFetch } from '@/lib/api';
 import { Role } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Trash2, Plus } from 'lucide-react';
 
 export default function RolesPage() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function load() {
     const data = await apiFetch<Role[]>('/roles');
@@ -19,60 +26,92 @@ export default function RolesPage() {
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
     setError('');
+    setLoading(true);
     try {
       await apiFetch('/roles', { method: 'POST', body: JSON.stringify({ name, description }) });
-      setName(''); setDescription('');
+      setName('');
+      setDescription('');
       load();
     } catch {
-      setError('Failed to create role');
+      setError('No se pudo crear el rol');
+    } finally {
+      setLoading(false);
     }
   }
 
   async function handleDelete(id: number) {
-    if (!confirm('Delete this role?')) return;
+    if (!confirm('¿Eliminar este rol?')) return;
     await apiFetch(`/roles/${id}`, { method: 'DELETE' });
     load();
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-6">Roles</h1>
-      <form onSubmit={handleCreate} className="bg-white rounded-lg shadow p-4 mb-6 flex gap-3 items-end">
-        <div>
-          <label className="block text-sm font-medium mb-1">Name</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} required className="border rounded px-3 py-2 text-sm" />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Description</label>
-          <input value={description} onChange={(e) => setDescription(e.target.value)} className="border rounded px-3 py-2 text-sm" />
-        </div>
-        <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">Create</button>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-      </form>
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="text-left px-4 py-3 font-medium">ID</th>
-              <th className="text-left px-4 py-3 font-medium">Name</th>
-              <th className="text-left px-4 py-3 font-medium">Description</th>
-              <th className="px-4 py-3"></th>
-            </tr>
-          </thead>
-          <tbody>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold">Roles</h1>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Nuevo rol</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleCreate} className="flex flex-col sm:flex-row gap-3 items-end">
+            <div className="flex-1 space-y-1.5">
+              <Label>Nombre</Label>
+              <Input
+                placeholder="ej. supervisor"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div className="flex-1 space-y-1.5">
+              <Label>Descripción</Label>
+              <Input
+                placeholder="Descripción del rol"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+            <Button type="submit" disabled={loading} className="shrink-0">
+              <Plus className="h-4 w-4 mr-1" />
+              {loading ? 'Guardando...' : 'Crear'}
+            </Button>
+          </form>
+          {error && <p className="text-sm text-destructive mt-2">{error}</p>}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nombre</TableHead>
+              <TableHead>Descripción</TableHead>
+              <TableHead className="w-12"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {roles.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={3} className="text-center text-muted-foreground py-8">
+                  No hay roles registrados
+                </TableCell>
+              </TableRow>
+            )}
             {roles.map((r) => (
-              <tr key={r.id} className="border-t">
-                <td className="px-4 py-3 text-gray-500">{r.id}</td>
-                <td className="px-4 py-3 font-medium">{r.name}</td>
-                <td className="px-4 py-3 text-gray-500">{r.description || '—'}</td>
-                <td className="px-4 py-3">
-                  <button onClick={() => handleDelete(r.id)} className="text-red-500 hover:text-red-700 text-xs">Delete</button>
-                </td>
-              </tr>
+              <TableRow key={r.id}>
+                <TableCell className="font-medium">{r.name}</TableCell>
+                <TableCell className="text-muted-foreground">{r.description || '—'}</TableCell>
+                <TableCell>
+                  <Button variant="ghost" size="icon" onClick={() => handleDelete(r.id)} className="text-destructive hover:text-destructive">
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </Card>
     </div>
   );
 }
